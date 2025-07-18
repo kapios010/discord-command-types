@@ -1,0 +1,11 @@
+{
+    "name": "@slash/creator",
+    "version": "0.0.0",
+    "author": {
+        "name": "kapios010",
+        "url": "https://kapios010"
+    },
+    "dependencies": {
+        "discord.js": "^14.21.0"
+    }
+}
