@@ -1,11 +1,13 @@
 {
-    "name": "@slash/creator",
+    "name": "@dsc-slash/builder",
     "version": "0.0.0",
     "author": {
         "name": "kapios010",
         "url": "https://kapios010"
     },
     "dependencies": {
-        "discord.js": "^14.21.0"
+        "@sapphire/shapeshift": "^4.0.0",
+        "discord.js": "^14.21.0",
+        "lilconfig": "^3.1.3"
     }
 }
