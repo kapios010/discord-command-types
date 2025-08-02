@@ -6,7 +6,7 @@ import {
     BaseChoosableOptionBuilder,
 } from './common-choosable';
 
-interface StringOption<TName extends string>
+export interface StringOption<TName extends string>
     extends BaseChoosableOption<TName, DiscordOptionTypes.STRING, string> {
     min_length?: number;
     max_length?: number;
