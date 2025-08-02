@@ -1,11 +1,29 @@
-import { s } from '@sapphire/shapeshift'
+import { BaseValidator, s } from '@sapphire/shapeshift'
 
 const namePredicate = s
 	.string()
 	.lengthGreaterThanOrEqual(1)
 	.lengthLessThanOrEqual(32)
-	.regex(/^[\p{Ll}\p{Lm}\p{Lo}\p{N}\p{sc=Devanagari}\p{sc=Thai}_-]+$/u)
+	.regex(/^[-_'\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}$/u)
 
 export function validateName(name:unknown): asserts name is string {
     namePredicate.parse(name)
+}
+
+const descriptionPredicate = s
+	.string()
+	.lengthGreaterThanOrEqual(1)
+	.lengthLessThanOrEqual(100)
+
+export function validateDescription(description: unknown): asserts description is string {
+	descriptionPredicate.parse(description)
+}
+
+const choiceNamePredicate = s
+	.string()
+	.lengthGreaterThanOrEqual(1)
+	.lengthLessThanOrEqual(100)
+
+export function validateChoiceName(name: unknown): asserts name is string {
+	choiceNamePredicate.parse(name)
 }
