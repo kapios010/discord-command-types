@@ -1,6 +1,9 @@
 import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from './common';
 import { Choice, ChoiceBuilder, ChoiceInput, ChoosableTypes } from './choices';
 
+// TODO - Choice names need to be unique: TName type for choice class + verify
+// OPTIONAL - Add support for autocomplete (later)
+
 export interface BaseChoosableOption<
     TName extends string,
     TType extends ChoosableTypes,
