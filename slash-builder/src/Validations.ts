@@ -27,3 +27,23 @@ const choiceNamePredicate = s
 export function validateChoiceName(name: unknown): asserts name is string {
 	choiceNamePredicate.parse(name)
 }
+
+const stringOptionMinLengthPredicate = s
+	.number()
+	.int()
+	.greaterThanOrEqual(0)
+	.lessThanOrEqual(6000)
+
+export function validateStringOptionMinLength(length: unknown): asserts length is number {
+	stringOptionMinLengthPredicate.parse(length)
+}
+
+const stringOptionMaxLengthPredicate = s
+	.number()
+	.int()
+	.greaterThanOrEqual(0)
+	.lessThanOrEqual(6000)
+
+export function validateStringOptionMaxLength(length: unknown): asserts length is number {
+	stringOptionMaxLengthPredicate.parse(length)
+}

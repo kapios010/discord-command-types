@@ -1,5 +1,6 @@
+import { validateStringOptionMaxLength, validateStringOptionMinLength } from '../Validations';
 import { ChoiceBuilder } from './choices';
-import { BaseOption, DiscordOptionTypes } from './common';
+import { DiscordOptionTypes } from './common';
 import {
     BaseChoosableOption,
     BaseChoosableOptionBuilder,
@@ -19,7 +20,8 @@ export class StringOptionBuilder<TName extends string, TInputs extends string>
     >
     implements StringOption<TName>
 {
-    declare public readonly;
+    declare public readonly min_length?: number;
+    declare public readonly max_length?: number;
     public readonly type = DiscordOptionTypes.STRING;
 
     public setChoices<TKeys extends string>(
@@ -30,6 +32,18 @@ export class StringOptionBuilder<TName extends string, TInputs extends string>
         let derived = this as unknown as StringOptionBuilder<TName, TKeys>;
         derived._setChoices(callbackfn);
         return derived;
+    }
+
+    public setMinLength(length: number) {
+        validateStringOptionMinLength(length)
+        Reflect.set(this, 'min_length', length)
+        return this
+    }
+
+    public setMaxLength(length: number) {
+        validateStringOptionMaxLength(length)
+        Reflect.set(this, 'max_length', length)
+        return this
     }
 
     public build() {
