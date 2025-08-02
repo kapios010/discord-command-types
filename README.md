@@ -1,2 +1,1 @@
-# **/slash command** builder
-##### A plugin for discord.js
+# */slash command* builder for discord.js
