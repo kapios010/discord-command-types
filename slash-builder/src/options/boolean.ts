@@ -5,7 +5,7 @@ export class BooleanOptionBuilder<
 > extends BaseOptionBuilder<TName, DiscordOptionTypes.BOOLEAN> {
     public type = DiscordOptionTypes.BOOLEAN as const;
 
-    public build(): BaseOption<TName, DiscordOptionTypes.BOOLEAN> {
+    public build() {
         return this as BaseOption<TName, DiscordOptionTypes.BOOLEAN>
     }
 }
