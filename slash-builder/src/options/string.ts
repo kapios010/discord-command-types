@@ -6,19 +6,19 @@ import {
     BaseChoosableOptionBuilder,
 } from './common-choosable';
 
-export interface StringOption<TName extends string>
-    extends BaseChoosableOption<TName, DiscordOptionTypes.STRING, string> {
+export interface StringOption<TName extends string, TInputs extends string>
+    extends BaseChoosableOption<TName, DiscordOptionTypes.STRING, TInputs> {
     min_length?: number;
     max_length?: number;
 }
 
-export class StringOptionBuilder<TName extends string, TInputs extends string>
+export class StringOptionBuilder<TName extends string, TInputs extends string = never>
     extends BaseChoosableOptionBuilder<
         TName,
         DiscordOptionTypes.STRING,
         TInputs
     >
-    implements StringOption<TName>
+    implements StringOption<TName, TInputs>
 {
     declare public readonly min_length?: number;
     declare public readonly max_length?: number;
@@ -47,7 +47,7 @@ export class StringOptionBuilder<TName extends string, TInputs extends string>
     }
 
     public build() {
-        return this as StringOption<TName>;
+        return this as StringOption<TName, TInputs>;
     }
 }
 
