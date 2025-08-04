@@ -20,8 +20,8 @@ export class StringOptionBuilder<TName extends string, TInputs extends string = 
     >
     implements StringOption<TName, TInputs>
 {
-    declare public readonly min_length?: number;
-    declare public readonly max_length?: number;
+    public readonly min_length?: number;
+    public readonly max_length?: number;
     public readonly type = DiscordOptionTypes.STRING;
 
     public setChoices<TKeys extends string>(
