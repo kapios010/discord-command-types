@@ -1,5 +1,10 @@
 import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from './common';
-import { Choice, ChoiceBuilder, ChoiceInput, ChoosableTypes } from './choices';
+import {
+    Choice,
+    ChoiceBuilder,
+    ChoiceInput,
+    ChoosableTypes,
+} from './choices/choices';
 
 // TODO - Choice names need to be unique: TName type for choice class + verify
 // OPTIONAL - Add support for autocomplete (later)
@@ -9,7 +14,9 @@ export interface BaseChoosableOption<
     TType extends ChoosableTypes,
     TInputs extends ChoiceInput<TType>,
 > extends BaseOption<TName, TType> {
-    readonly choices: TInputs extends never ? undefined : ReadonlyArray<Choice<TType, TInputs>>;
+    readonly choices: TInputs extends never
+        ? undefined
+        : ReadonlyArray<Choice<TType, TInputs>>;
 }
 
 export abstract class BaseChoosableOptionBuilder<
@@ -20,7 +27,9 @@ export abstract class BaseChoosableOptionBuilder<
     extends BaseOptionBuilder<TName, TType>
     implements BaseChoosableOption<TName, TType, TInputs>
 {
-    declare public readonly choices: TInputs extends never ? undefined : ReadonlyArray<Choice<TType, TInputs>>;
+    declare public readonly choices: TInputs extends never
+        ? undefined
+        : ReadonlyArray<Choice<TType, TInputs>>;
 
     protected _setChoices(
         callbackfn: (
