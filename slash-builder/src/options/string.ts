@@ -8,8 +8,8 @@ import {
 
 export interface StringOption<TName extends string, TInputs extends string>
     extends BaseChoosableOption<TName, DiscordOptionTypes.STRING, TInputs> {
-    min_length?: number;
-    max_length?: number;
+    readonly min_length?: number;
+    readonly max_length?: number;
 }
 
 export class StringOptionBuilder<TName extends string, TInputs extends string = never>

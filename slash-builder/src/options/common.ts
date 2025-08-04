@@ -17,12 +17,12 @@ export interface BaseOption<
     TName extends string,
     TType extends DiscordOptionTypes,
 > {
-    type: TType;
-    name: TName;
-    name_localizations?: Partial<Record<Locale, string>>;
-    description: string;
-    description_localizations?: Partial<Record<Locale, string>>;
-    required?: true;
+    readonly type: TType;
+    readonly name: TName;
+    readonly name_localizations?: Partial<Readonly<Record<Locale, string>>>;
+    readonly description: string;
+    readonly description_localizations?: Partial<Readonly<Record<Locale, string>>>;
+    readonly required?: true;
 }
 
 export abstract class BaseOptionBuilder<

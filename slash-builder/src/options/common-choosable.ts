@@ -9,7 +9,7 @@ export interface BaseChoosableOption<
     TType extends ChoosableTypes,
     TInputs extends ChoiceInput<TType>,
 > extends BaseOption<TName, TType> {
-    choices: TInputs extends never ? undefined : ReadonlyArray<Choice<TType, TInputs>>;
+    readonly choices: TInputs extends never ? undefined : ReadonlyArray<Choice<TType, TInputs>>;
 }
 
 export abstract class BaseChoosableOptionBuilder<
