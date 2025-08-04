@@ -1,8 +1,5 @@
-import {
-    validateStringOptionMaxLength,
-    validateStringOptionMinLength,
-} from '../Validations';
-import { ChoiceBuilder } from './choices/choices';
+import { validateStringOptionMaxLength, validateStringOptionMinLength } from '../Validations';
+import { ChoiceBuilder } from './choices';
 import { DiscordOptionTypes } from './common';
 import {
     BaseChoosableOption,
@@ -15,10 +12,7 @@ export interface StringOption<TName extends string, TInputs extends string>
     readonly max_length?: number;
 }
 
-export class StringOptionBuilder<
-        TName extends string,
-        TInputs extends string = never,
-    >
+export class StringOptionBuilder<TName extends string, TInputs extends string = never>
     extends BaseChoosableOptionBuilder<
         TName,
         DiscordOptionTypes.STRING,
@@ -41,15 +35,15 @@ export class StringOptionBuilder<
     }
 
     public setMinLength(length: number) {
-        validateStringOptionMinLength(length);
-        Reflect.set(this, 'min_length', length);
-        return this;
+        validateStringOptionMinLength(length)
+        Reflect.set(this, 'min_length', length)
+        return this
     }
 
     public setMaxLength(length: number) {
-        validateStringOptionMaxLength(length);
-        Reflect.set(this, 'max_length', length);
-        return this;
+        validateStringOptionMaxLength(length)
+        Reflect.set(this, 'max_length', length)
+        return this
     }
 
     public build() {
