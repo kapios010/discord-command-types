@@ -86,5 +86,5 @@ export abstract class BaseOptionBuilder<
     /**
      * @internal
      */
-    public abstract build(): unknown
+    public abstract build(): BaseOption<TName, TType>
 }
