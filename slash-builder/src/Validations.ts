@@ -47,3 +47,11 @@ const stringOptionMaxLengthPredicate = s
 export function validateStringOptionMaxLength(length: unknown): asserts length is number {
 	stringOptionMaxLengthPredicate.parse(length)
 }
+
+const intPredicate = s
+	.number()
+	.int()
+
+export function validateInteger(number: unknown): asserts number is number {
+	intPredicate.parse(number)
+}
