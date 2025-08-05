@@ -1,4 +1,7 @@
-import { validateStringOptionMaxLength, validateStringOptionMinLength } from '../Validations';
+import {
+    validateStringOptionMaxLength,
+    validateStringOptionMinLength,
+} from '../utils/Validations';
 import { ChoiceBuilder } from './choices';
 import { DiscordOptionTypes } from './common';
 import {
@@ -6,13 +9,25 @@ import {
     BaseChoosableOptionBuilder,
 } from './common-choosable';
 
-export interface StringOption<TName extends string, TRequired extends boolean, TInputs extends string>
-    extends BaseChoosableOption<TName, DiscordOptionTypes.STRING, TRequired, TInputs> {
+export interface StringOption<
+    TName extends string,
+    TRequired extends boolean,
+    TInputs extends string,
+> extends BaseChoosableOption<
+        TName,
+        DiscordOptionTypes.STRING,
+        TRequired,
+        TInputs
+    > {
     readonly min_length?: number;
     readonly max_length?: number;
 }
 
-export class StringOptionBuilder<TName extends string, TRequired extends boolean, TInputs extends string = never>
+export class StringOptionBuilder<
+        TName extends string,
+        TRequired extends boolean,
+        TInputs extends string = never,
+    >
     extends BaseChoosableOptionBuilder<
         TName,
         DiscordOptionTypes.STRING,
@@ -26,8 +41,8 @@ export class StringOptionBuilder<TName extends string, TRequired extends boolean
     public readonly type = DiscordOptionTypes.STRING;
 
     public setRequired<T extends boolean>(required: T) {
-        Reflect.set(this, 'required', required)
-        return this as unknown as StringOptionBuilder<TName, T, TInputs>
+        Reflect.set(this, 'required', required);
+        return this as unknown as StringOptionBuilder<TName, T, TInputs>;
     }
 
     public setChoices<TKeys extends string>(
@@ -35,21 +50,25 @@ export class StringOptionBuilder<TName extends string, TRequired extends boolean
             choice: ChoiceBuilder<DiscordOptionTypes.STRING, string>
         ) => ChoiceBuilder<DiscordOptionTypes.STRING, TKeys>[]
     ) {
-        let derived = this as unknown as StringOptionBuilder<TName, TRequired, TKeys>;
+        let derived = this as unknown as StringOptionBuilder<
+            TName,
+            TRequired,
+            TKeys
+        >;
         derived._setChoices(callbackfn);
         return derived;
     }
 
     public setMinLength(length: number) {
-        validateStringOptionMinLength(length)
-        Reflect.set(this, 'min_length', length)
-        return this
+        validateStringOptionMinLength(length);
+        Reflect.set(this, 'min_length', length);
+        return this;
     }
 
     public setMaxLength(length: number) {
-        validateStringOptionMaxLength(length)
-        Reflect.set(this, 'max_length', length)
-        return this
+        validateStringOptionMaxLength(length);
+        Reflect.set(this, 'max_length', length);
+        return this;
     }
 
     public build() {

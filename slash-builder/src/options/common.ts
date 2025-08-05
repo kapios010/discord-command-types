@@ -1,5 +1,5 @@
 import { Locale } from 'discord.js';
-import { validateDescription, validateName } from '../Validations';
+import { validateDescription, validateName } from '../utils/Validations';
 
 export enum DiscordOptionTypes {
     'STRING' = 3,
@@ -16,20 +16,22 @@ export enum DiscordOptionTypes {
 export interface BaseOption<
     TName extends string,
     TType extends DiscordOptionTypes,
-    TRequired extends boolean
+    TRequired extends boolean,
 > {
     readonly type: TType;
     readonly name: TName;
     readonly name_localizations?: Partial<Readonly<Record<Locale, string>>>;
     readonly description: string;
-    readonly description_localizations?: Partial<Readonly<Record<Locale, string>>>;
+    readonly description_localizations?: Partial<
+        Readonly<Record<Locale, string>>
+    >;
     readonly required?: TRequired;
 }
 
 export abstract class BaseOptionBuilder<
     TName extends string,
     TType extends DiscordOptionTypes,
-    TRequired extends boolean
+    TRequired extends boolean,
 > implements BaseOption<TName, TType, TRequired>
 {
     public abstract readonly type: TType;
@@ -80,10 +82,12 @@ export abstract class BaseOptionBuilder<
         return this;
     }
 
-    public abstract setRequired<T extends boolean>(required: T): BaseOptionBuilder<TName, TType, T>
+    public abstract setRequired<T extends boolean>(
+        required: T
+    ): BaseOptionBuilder<TName, TType, T>;
 
     /**
      * @internal
      */
-    public abstract build(): BaseOption<TName, TType, TRequired>
+    public abstract build(): BaseOption<TName, TType, TRequired>;
 }

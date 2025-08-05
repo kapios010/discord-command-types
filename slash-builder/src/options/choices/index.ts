@@ -1,6 +1,6 @@
 import { Locale } from 'discord.js';
 import { DiscordOptionTypes } from '../common';
-import { validateChoiceName, validateName } from '../../Validations';
+import { validateChoiceName, validateName } from '../../utils/Validations';
 
 export type ChoosableTypes =
     | DiscordOptionTypes.STRING
