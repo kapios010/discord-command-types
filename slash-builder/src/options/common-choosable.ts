@@ -7,18 +7,20 @@ import { Choice, ChoiceBuilder, ChoiceInput, ChoosableTypes } from './choices';
 export interface BaseChoosableOption<
     TName extends string,
     TType extends ChoosableTypes,
+    TRequired extends boolean,
     TInputs extends ChoiceInput<TType>,
-> extends BaseOption<TName, TType> {
+> extends BaseOption<TName, TType, TRequired> {
     readonly choices: TInputs extends never ? undefined : ReadonlyArray<Choice<TType, TInputs>>;
 }
 
 export abstract class BaseChoosableOptionBuilder<
         TName extends string,
         TType extends ChoosableTypes,
+        TRequired extends boolean,
         TInputs extends ChoiceInput<TType>,
     >
-    extends BaseOptionBuilder<TName, TType>
-    implements BaseChoosableOption<TName, TType, TInputs>
+    extends BaseOptionBuilder<TName, TType, TRequired>
+    implements BaseChoosableOption<TName, TType, TRequired, TInputs>
 {
     declare public readonly choices: TInputs extends never ? undefined : ReadonlyArray<Choice<TType, TInputs>>;
 
@@ -37,5 +39,5 @@ export abstract class BaseChoosableOptionBuilder<
         callbackfn: (
             choice: ChoiceBuilder<TType>
         ) => ChoiceBuilder<TType, TKeys>[]
-    ): BaseChoosableOptionBuilder<TName, TType, TKeys>;
+    ): BaseChoosableOptionBuilder<TName, TType, TRequired, TKeys>;
 }

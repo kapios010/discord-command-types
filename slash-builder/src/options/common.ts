@@ -16,19 +16,21 @@ export enum DiscordOptionTypes {
 export interface BaseOption<
     TName extends string,
     TType extends DiscordOptionTypes,
+    TRequired extends boolean
 > {
     readonly type: TType;
     readonly name: TName;
     readonly name_localizations?: Partial<Readonly<Record<Locale, string>>>;
     readonly description: string;
     readonly description_localizations?: Partial<Readonly<Record<Locale, string>>>;
-    readonly required?: true;
+    readonly required?: TRequired;
 }
 
 export abstract class BaseOptionBuilder<
     TName extends string,
     TType extends DiscordOptionTypes,
-> implements BaseOption<TName, TType>
+    TRequired extends boolean
+> implements BaseOption<TName, TType, TRequired>
 {
     public abstract readonly type: TType;
     declare public readonly name: TName;
@@ -39,7 +41,7 @@ export abstract class BaseOptionBuilder<
     declare public readonly description_localizations?: Partial<
         Readonly<Record<Locale, string>>
     >;
-    declare public readonly required?: true;
+    declare public readonly required: TRequired;
 
     constructor(name: TName) {
         validateName(name);
@@ -78,13 +80,10 @@ export abstract class BaseOptionBuilder<
         return this;
     }
 
-    public setRequired() {
-        Reflect.set(this, 'required', true);
-        return this;
-    }
+    public abstract setRequired<T extends boolean>(required: T): BaseOptionBuilder<TName, TType, T>
 
     /**
      * @internal
      */
-    public abstract build(): BaseOption<TName, TType>
+    public abstract build(): BaseOption<TName, TType, TRequired>
 }

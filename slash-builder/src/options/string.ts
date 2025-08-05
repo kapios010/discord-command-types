@@ -6,30 +6,36 @@ import {
     BaseChoosableOptionBuilder,
 } from './common-choosable';
 
-export interface StringOption<TName extends string, TInputs extends string>
-    extends BaseChoosableOption<TName, DiscordOptionTypes.STRING, TInputs> {
+export interface StringOption<TName extends string, TRequired extends boolean, TInputs extends string>
+    extends BaseChoosableOption<TName, DiscordOptionTypes.STRING, TRequired, TInputs> {
     readonly min_length?: number;
     readonly max_length?: number;
 }
 
-export class StringOptionBuilder<TName extends string, TInputs extends string = never>
+export class StringOptionBuilder<TName extends string, TRequired extends boolean, TInputs extends string = never>
     extends BaseChoosableOptionBuilder<
         TName,
         DiscordOptionTypes.STRING,
+        TRequired,
         TInputs
     >
-    implements StringOption<TName, TInputs>
+    implements StringOption<TName, TRequired, TInputs>
 {
     public readonly min_length?: number;
     public readonly max_length?: number;
     public readonly type = DiscordOptionTypes.STRING;
 
+    public setRequired<T extends boolean>(required: T) {
+        Reflect.set(this, 'required', required)
+        return this as unknown as StringOptionBuilder<TName, T, TInputs>
+    }
+
     public setChoices<TKeys extends string>(
         callbackfn: (
             choice: ChoiceBuilder<DiscordOptionTypes.STRING, string>
         ) => ChoiceBuilder<DiscordOptionTypes.STRING, TKeys>[]
-    ): StringOptionBuilder<TName, TKeys> {
-        let derived = this as unknown as StringOptionBuilder<TName, TKeys>;
+    ) {
+        let derived = this as unknown as StringOptionBuilder<TName, TRequired, TKeys>;
         derived._setChoices(callbackfn);
         return derived;
     }
@@ -47,7 +53,7 @@ export class StringOptionBuilder<TName extends string, TInputs extends string = 
     }
 
     public build() {
-        return this as StringOption<TName, TInputs>;
+        return this as StringOption<TName, TRequired, TInputs>;
     }
 }
 

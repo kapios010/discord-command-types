@@ -1,12 +1,18 @@
 import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from "./common";
 
 export class UserOptionBuilder<
-    TName extends string
-> extends BaseOptionBuilder<TName, DiscordOptionTypes.USER> {
+    TName extends string,
+    TRequired extends boolean
+> extends BaseOptionBuilder<TName, DiscordOptionTypes.USER, TRequired> {
     public type = DiscordOptionTypes.USER as const;
 
+    public setRequired<T extends boolean>(required: T) {
+        Reflect.set(this, 'required', required)
+        return this as unknown as UserOptionBuilder<TName, T>
+    }
+
     public build() {
-        return this as BaseOptionBuilder<TName, DiscordOptionTypes.USER>
+        return this as BaseOptionBuilder<TName, DiscordOptionTypes.USER, TRequired>
     }
 }
 

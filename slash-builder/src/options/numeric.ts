@@ -5,18 +5,20 @@ import { BaseChoosableOption, BaseChoosableOptionBuilder } from "./common-choosa
 
 export interface NumericOption<
         TName extends string,
-        TInputs extends number
+        TRequired extends boolean,
+        TInputs extends number,
     >
-    extends BaseChoosableOption<TName, DiscordOptionTypes.NUMBER | DiscordOptionTypes.INTEGER, TInputs> {
+    extends BaseChoosableOption<TName, DiscordOptionTypes.NUMBER | DiscordOptionTypes.INTEGER, TRequired, TInputs> {
     readonly min_value?: number;
     readonly max_value?: number;
 }
 
 export class NumericOptionBuilder<
     TName extends string,
-    TInputs extends number
-> extends BaseChoosableOptionBuilder<TName, DiscordOptionTypes.NUMBER | DiscordOptionTypes.INTEGER, TInputs>
-implements NumericOption<TName, TInputs> {
+    TRequired extends boolean,
+    TInputs extends number = never,
+> extends BaseChoosableOptionBuilder<TName, DiscordOptionTypes.NUMBER | DiscordOptionTypes.INTEGER, TRequired, TInputs>
+implements NumericOption<TName, TRequired, TInputs> {
     public readonly min_value?: number;
     public readonly max_value?: number;
     public readonly type: DiscordOptionTypes.INTEGER | DiscordOptionTypes.NUMBER;
@@ -26,8 +28,13 @@ implements NumericOption<TName, TInputs> {
         this.type = type
     }
 
+    public setRequired<T extends boolean>(required: T) {
+        Reflect.set(this, 'required', required)
+        return this as unknown as NumericOptionBuilder<TName, T, TInputs>
+    }
+
     public setChoices<TKeys extends number>(callbackfn: (choice: ChoiceBuilder<DiscordOptionTypes.INTEGER | DiscordOptionTypes.NUMBER, number>) => ChoiceBuilder<DiscordOptionTypes.INTEGER | DiscordOptionTypes.NUMBER, TKeys>[]) {
-        let derived = this as unknown as NumericOptionBuilder<TName, TKeys>
+        let derived = this as unknown as NumericOptionBuilder<TName, TRequired, TKeys>
         derived._setChoices(callbackfn)
         return derived
     }
@@ -45,7 +52,7 @@ implements NumericOption<TName, TInputs> {
     }
 
     public build() {
-        return this as NumericOption<TName, TInputs>
+        return this as NumericOption<TName, TRequired, TInputs>
     }
 }
 

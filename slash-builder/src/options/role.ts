@@ -1,12 +1,18 @@
 import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from "./common";
 
 export class RoleOptionBuilder<
-    TName extends string
-> extends BaseOptionBuilder<TName, DiscordOptionTypes.ROLE> {
+    TName extends string,
+    TRequired extends boolean,
+> extends BaseOptionBuilder<TName, DiscordOptionTypes.ROLE, TRequired> {
     public type = DiscordOptionTypes.ROLE as const;
 
+    public setRequired<T extends boolean>(required: T) {
+        Reflect.set(this, 'required', required)
+        return this as unknown as RoleOptionBuilder<TName, T>
+    }
+
     public build() {
-        return this as BaseOption<TName, DiscordOptionTypes.ROLE>
+        return this as BaseOption<TName, DiscordOptionTypes.ROLE, TRequired>
     }
 }
 

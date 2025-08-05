@@ -2,15 +2,17 @@ import { ChannelType } from 'discord.js'
 import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from './common';
 
 export interface ChannelOption<
-    TName extends string
-> extends BaseOption<TName, DiscordOptionTypes.CHANNEL> {
+    TName extends string,
+    TRequired extends boolean
+> extends BaseOption<TName, DiscordOptionTypes.CHANNEL, TRequired> {
     readonly channel_types?: ReadonlyArray<ChannelType>
 }
 
 export class ChannelOptionBuilder<
     TName extends string,
-> extends BaseOptionBuilder<TName, DiscordOptionTypes.CHANNEL>
-implements ChannelOption<TName> {
+    TRequired extends boolean
+> extends BaseOptionBuilder<TName, DiscordOptionTypes.CHANNEL,TRequired>
+implements ChannelOption<TName, TRequired> {
     public readonly channel_types?: ReadonlyArray<ChannelType>;
     public type = DiscordOptionTypes.CHANNEL as const;
 
@@ -19,8 +21,13 @@ implements ChannelOption<TName> {
         return this
     }
 
+    public setRequired<T extends boolean>(required: T) {
+        Reflect.set(this, 'required', required)
+        return this as unknown as ChannelOptionBuilder<TName, T>
+    }
+
     public build() {
-        return this as ChannelOption<TName>
+        return this as ChannelOption<TName, TRequired>
     }
 }
 
