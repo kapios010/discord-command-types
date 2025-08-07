@@ -1,6 +1,10 @@
 import { Locale } from 'discord.js';
 import { validateDescription, validateName } from '../utils/Validations';
 
+/**
+ * Type of command option, excluding `SUB_COMMAND = 1` and `SUB_COMMAND_GROUP = 2`
+ * @see {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-type}
+ */
 export enum DiscordOptionTypes {
     'STRING' = 3,
     'INTEGER' = 4,
@@ -13,18 +17,41 @@ export enum DiscordOptionTypes {
     'ATTACHMENT' = 11,
 }
 
+/**
+ * Config data of an option
+ * @see {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-structure}
+ */
 export interface BaseOption<
     TName extends string,
     TType extends DiscordOptionTypes,
     TRequired extends boolean,
 > {
+    /**
+     * Type of the option
+     * @see {@linkcode DiscordOptionTypes}
+     */
     readonly type: TType;
+    /**
+     * The name of the option
+     */
     readonly name: TName;
+    /**
+     * The localized names of the option
+     */
     readonly name_localizations?: Partial<Readonly<Record<Locale, string>>>;
+    /**
+     * The description of the option
+     */
     readonly description: string;
+    /**
+     * The localized descriptions of the option
+     */
     readonly description_localizations?: Partial<
         Readonly<Record<Locale, string>>
     >;
+    /**
+     * Whether the option is required
+     */
     readonly required?: TRequired;
 }
 
@@ -45,11 +72,19 @@ export abstract class BaseOptionBuilder<
     >;
     declare public readonly required: TRequired;
 
+    /**
+     * @param name - The option name adhering to {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-naming | Discord's naming scheme}
+     */
     constructor(name: TName) {
         validateName(name);
         Reflect.set(this, 'name', name);
     }
 
+    /**
+     * Adds a localization of the option name
+     * @param locale - The language of the localization
+     * @param name - The localized name, adhering to {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-naming | Discord's naming scheme}
+     */
     public addNameLocalization<TLocale extends Locale>(
         locale: TLocale extends keyof this['name_localizations']
             ? never
@@ -63,12 +98,21 @@ export abstract class BaseOptionBuilder<
         return this;
     }
 
+    /**
+     * Sets the description of the option
+     * @param description - The content of the description (1-100 characters)
+     */
     public setDescription(description: string) {
         validateDescription(description);
         Reflect.set(this, 'description', description);
         return this;
     }
 
+    /**
+     * Adds a translation of the option description.
+     * @param locale - The language of the translation
+     * @param description - The content of the translation
+     */
     public addDescriptionLocalization<TLocale extends Locale>(
         locale: TLocale extends keyof this['description_localizations']
             ? never
@@ -82,6 +126,10 @@ export abstract class BaseOptionBuilder<
         return this;
     }
 
+    /**
+     * Changes whether the option is required or optional
+     * @param required - true if required
+     */
     public abstract setRequired<T extends boolean>(
         required: T
     ): BaseOptionBuilder<TName, TType, T>;
