@@ -73,4 +73,4 @@ export class ChoiceBuilder<
     }
 }
 
-export type ChoiceKeys<T extends Choice[]> = T[number]['value'];
+export type ChoiceKeys<T extends readonly Choice[]> = T[number]['value'];
