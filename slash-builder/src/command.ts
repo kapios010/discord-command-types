@@ -40,7 +40,7 @@ export class SlashCommandBuilder<
     }
 
     public setOptions<TLOptions extends BaseOption<string, DiscordOptionTypes, boolean>>(options: TLOptions[]) {
-        const derived = SlashCommandBuilder<TLOptions>
+        const derived = this as unknown as SlashCommandBuilder<TLOptions>
         Reflect.set(derived, 'options', options)
         return derived
     }
