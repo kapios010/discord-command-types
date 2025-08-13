@@ -1,10 +1,18 @@
-import { Locale } from 'discord.js';
-import { SlashCommandMigratorData } from './command_data';
+import { ChatInputCommandInteraction, Locale } from 'discord.js';
+import { SlashCommandExecutor, SlashCommandMigratorData } from './command_data';
 import { BaseOption, DiscordOptionTypes } from './options/common';
 import { validateDescription, validateName } from './utils/Validations';
+import { ParsedOptions } from './parse_options';
+import { string } from './options/string';
+
+export const GLOBAL: unique symbol = Symbol('Global');
 
 export class SlashCommandBuilder<
-    TOptions extends BaseOption<string, DiscordOptionTypes, boolean>,
+    TOptions extends BaseOption<
+        string,
+        DiscordOptionTypes,
+        boolean
+    >[] = never[],
 > implements SlashCommandMigratorData<TOptions>
 {
     public readonly name: string;
@@ -13,11 +21,29 @@ export class SlashCommandBuilder<
     public readonly name_localizations?: Partial<Record<Locale, string>>;
     public readonly scope: string[] | 'GLOBAL';
     public readonly nsfw?: boolean;
-    public readonly options: TOptions extends never ? undefined : TOptions[];
+    public readonly options: TOptions extends never[] ? undefined : TOptions;
 
     public setName(name: string) {
         validateName(name);
         Reflect.set(this, 'name', name);
+        return this;
+    }
+
+    /**
+     * Adds a localization of the option name
+     * @param locale - The language of the localization
+     * @param name - The localized name, adhering to {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-naming | Discord's naming scheme}
+     */
+    public addNameLocalization<TLocale extends Locale>(
+        locale: TLocale extends keyof this['name_localizations']
+            ? never
+            : TLocale,
+        name: string
+    ) {
+        validateName(name);
+        if (typeof this.name_localizations === 'undefined')
+            Reflect.set(this, 'name_localizations', {});
+        Reflect.set(this.name_localizations!, locale, name);
         return this;
     }
 
@@ -28,27 +54,56 @@ export class SlashCommandBuilder<
     }
 
     /**
-     * @param scope - `GLOBAL` if it's a global command, otherwise array of guild IDs
+     * Adds a translation of the option description.
+     * @param locale - The language of the translation
+     * @param description - The content of the translation
      */
-    public setScope(scope: string[] | 'GLOBAL') {
-        Reflect.set(this, 'scope', scope)
-        return this
+        public addDescriptionLocalization<TLocale extends Locale>(
+            locale: TLocale extends keyof this['description_localizations']
+                ? never
+                : TLocale,
+            description: string
+        ) {
+            validateDescription(description);
+            if (typeof this.description_localizations === 'undefined')
+                Reflect.set(this, 'description_localizations', {});
+            Reflect.set(this.description_localizations!, locale, description);
+            return this;
+        }
+
+    /**
+     * @param scope - `GLOBAL` (symbol) if it's a global command, otherwise array of guild IDs
+     */
+    public setScope(scope: string | typeof GLOBAL) {
+        Reflect.set(this, 'scope', scope);
+        return this;
     }
 
     public setNSFW(nsfw: boolean) {
-        Reflect.set(this, 'nsfw', nsfw)
+        Reflect.set(this, 'nsfw', nsfw);
     }
 
-    public setOptions<TLOptions extends BaseOption<string, DiscordOptionTypes, boolean>>(options: TLOptions[]) {
-        const derived = this as unknown as SlashCommandBuilder<TLOptions>
-        Reflect.set(derived, 'options', options)
-        return derived
+    public setOptions<
+        TLOptions extends BaseOption<string, DiscordOptionTypes, boolean>[],
+    >(options: TLOptions) {
+        const derived = this as unknown as SlashCommandBuilder<TLOptions>;
+        Reflect.set(derived, 'options', options);
+        return derived;
     }
 
-    public execute(callback: (options: any, interaction: any) => void) {
+    public onInteraction(
+        callback: (
+            options: ParsedOptions<TOptions>,
+            interaction: ChatInputCommandInteraction
+        ) => void
+    ): SlashCommandExecutor<TOptions> {
         return {
             data: this as SlashCommandMigratorData<TOptions>,
-            interaction: callback
-        }
+            execute: callback,
+        };
     }
 }
+
+let a = new SlashCommandBuilder()
+    .setOptions([string('blep').setRequired(true)])
+    .onInteraction((options, interaction) => {});

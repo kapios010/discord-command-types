@@ -1,6 +1,7 @@
-import { Locale } from 'discord.js';
+import { Base, ChatInputCommandInteraction, Locale } from 'discord.js';
 import { BaseOption, DiscordOptionTypes } from './options/common';
 import { NumericOption, integer } from './options/numeric';
+import { ParsedOptions } from './parse_options';
 
 export enum IntegrationTypes {
     GUILD_INSTALL,
@@ -14,16 +15,23 @@ export enum ContextTypes {
 }
 
 export interface SlashCommandMigratorData<
-    TOptions extends BaseOption<string, DiscordOptionTypes, boolean>,
+    TOptions extends BaseOption<string, DiscordOptionTypes, boolean>[],
 > {
     name: string;
     name_localizations?: Partial<Record<Locale, string>>;
     description: string;
     description_localizations?: Partial<Record<Locale, string>>;
     scope: string[] | 'GLOBAL';
-    options: TOptions extends never ? undefined : TOptions[];
+    options: TOptions extends never[] ? undefined : TOptions;
     // default_member_permissions - I don't understand this so it goes unimplemented for now
     nsfw?: boolean;
     // integration_types - Uninplemented for now
     // contexts - Unimplemented for now
+}
+
+export interface SlashCommandExecutor<
+    TOptions extends BaseOption<string, DiscordOptionTypes, boolean>[]
+> {
+    data: SlashCommandMigratorData<TOptions>,
+    execute: (options: ParsedOptions<TOptions>, interaction: ChatInputCommandInteraction) => void
 }
