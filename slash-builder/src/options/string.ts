@@ -12,7 +12,7 @@ import {
 export interface StringOption<
     TName extends string,
     TRequired extends boolean,
-    TInputs extends string,
+    TInputs extends string = never,
 > extends BaseChoosableOption<
         TName,
         DiscordOptionTypes.STRING,

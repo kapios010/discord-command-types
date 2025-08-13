@@ -1,22 +1,17 @@
 import { Locale } from 'discord.js';
 import { DiscordOptionTypes } from '../common';
 import { validateChoiceName, validateName } from '../../utils/Validations';
+import { TypeFromDiscordOptionType } from '../../parse_options';
 
 export type ChoosableTypes =
     | DiscordOptionTypes.STRING
     | DiscordOptionTypes.NUMBER
     | DiscordOptionTypes.INTEGER;
 
-export type ChoiceInput<TType extends ChoosableTypes> =
-    TType extends DiscordOptionTypes.STRING
-        ? string
-        : TType extends DiscordOptionTypes.INTEGER | DiscordOptionTypes.NUMBER
-          ? number
-          : never;
-
 export interface Choice<
     TType extends ChoosableTypes = ChoosableTypes,
-    TValue extends ChoiceInput<TType> = ChoiceInput<TType>,
+    TValue extends
+        TypeFromDiscordOptionType<TType> = TypeFromDiscordOptionType<TType>,
 > {
     name: string;
     name_localizations?: Partial<Record<Locale, string>>;
@@ -25,7 +20,8 @@ export interface Choice<
 
 export class ChoiceBuilder<
     TType extends ChoosableTypes,
-    TValue extends ChoiceInput<TType> = ChoiceInput<TType>,
+    TValue extends
+        TypeFromDiscordOptionType<TType> = TypeFromDiscordOptionType<TType>,
 > implements Choice<TType, TValue>
 {
     declare public readonly name: string;
@@ -36,7 +32,9 @@ export class ChoiceBuilder<
 
     constructor(type: TType) {}
 
-    public setValue<TLValue extends ChoiceInput<TType>>(value: TLValue) {
+    public setValue<TLValue extends TypeFromDiscordOptionType<TType>>(
+        value: TLValue
+    ) {
         // You know I thought using 'as unknown as X' was bad but then I saw that discord.js did something for options
         // It's probably still bad
         let changed = this as unknown as ChoiceBuilder<TType, TLValue>;
