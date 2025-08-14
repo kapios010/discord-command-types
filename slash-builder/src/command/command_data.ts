@@ -1,6 +1,6 @@
-import { Base, ChatInputCommandInteraction, Locale } from 'discord.js';
-import { BaseOption, DiscordOptionTypes } from './options/common';
-import { NumericOption, integer } from './options/numeric';
+import { Base, ChatInputCommandInteraction, Locale, SlashCommandBuilder } from 'discord.js';
+import { BaseOption, DiscordOptionTypes } from '../options/common';
+import { NumericOption, integer } from '../options/numeric';
 import { ParsedOptions } from './parse_options';
 
 export enum IntegrationTypes {
@@ -30,8 +30,11 @@ export interface SlashCommandMigratorData<
 }
 
 export interface SlashCommandExecutor<
-    TOptions extends BaseOption<string, DiscordOptionTypes, boolean>[]
+    TOptions extends BaseOption<string, DiscordOptionTypes, boolean>[],
 > {
-    data: SlashCommandMigratorData<TOptions>,
-    execute: (options: ParsedOptions<TOptions>, interaction: ChatInputCommandInteraction) => void
+    data: SlashCommandMigratorData<TOptions>;
+    execute: (
+        options: ParsedOptions<TOptions>,
+        interaction: ChatInputCommandInteraction
+    ) => void;
 }

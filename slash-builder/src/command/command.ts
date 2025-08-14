@@ -1,11 +1,11 @@
-import { ChatInputCommandInteraction, Locale } from 'discord.js';
+import { ChatInputCommandInteraction, Locale, TextBasedChannel } from 'discord.js';
 import { SlashCommandExecutor, SlashCommandMigratorData } from './command_data';
-import { BaseOption, DiscordOptionTypes } from './options/common';
-import { validateDescription, validateName } from './utils/Validations';
+import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from '../options/common';
+import { validateDescription, validateName } from '../utils/Validations';
 import { ParsedOptions } from './parse_options';
-import { string } from './options/string';
+import { string } from '../options/string';
 
-export const GLOBAL: unique symbol = Symbol('Global');
+export const SCOPE_GLOBAL: unique symbol = Symbol('Global');
 
 export class SlashCommandBuilder<
     TOptions extends BaseOption<
@@ -23,10 +23,9 @@ export class SlashCommandBuilder<
     public readonly nsfw?: boolean;
     public readonly options: TOptions extends never[] ? undefined : TOptions;
 
-    public setName(name: string) {
+    constructor(name: string) {
         validateName(name);
-        Reflect.set(this, 'name', name);
-        return this;
+        this.name = name
     }
 
     /**
@@ -58,23 +57,23 @@ export class SlashCommandBuilder<
      * @param locale - The language of the translation
      * @param description - The content of the translation
      */
-        public addDescriptionLocalization<TLocale extends Locale>(
-            locale: TLocale extends keyof this['description_localizations']
-                ? never
-                : TLocale,
-            description: string
-        ) {
-            validateDescription(description);
-            if (typeof this.description_localizations === 'undefined')
-                Reflect.set(this, 'description_localizations', {});
-            Reflect.set(this.description_localizations!, locale, description);
-            return this;
-        }
+    public addDescriptionLocalization<TLocale extends Locale>(
+        locale: TLocale extends keyof this['description_localizations']
+            ? never
+            : TLocale,
+        description: string
+    ) {
+        validateDescription(description);
+        if (typeof this.description_localizations === 'undefined')
+            Reflect.set(this, 'description_localizations', {});
+        Reflect.set(this.description_localizations!, locale, description);
+        return this;
+    }
 
     /**
      * @param scope - `GLOBAL` (symbol) if it's a global command, otherwise array of guild IDs
      */
-    public setScope(scope: string | typeof GLOBAL) {
+    public setScope(scope: string | typeof SCOPE_GLOBAL) {
         Reflect.set(this, 'scope', scope);
         return this;
     }
@@ -84,10 +83,10 @@ export class SlashCommandBuilder<
     }
 
     public setOptions<
-        TLOptions extends BaseOption<string, DiscordOptionTypes, boolean>[],
-    >(options: TLOptions) {
+        TLOptions extends BaseOptionBuilder<string, DiscordOptionTypes, boolean>[],
+    >(callbackfn: () => TLOptions) {
         const derived = this as unknown as SlashCommandBuilder<TLOptions>;
-        Reflect.set(derived, 'options', options);
+        Reflect.set(derived, 'options', callbackfn().map((value) => value.build()));
         return derived;
     }
 
@@ -103,7 +102,3 @@ export class SlashCommandBuilder<
         };
     }
 }
-
-let a = new SlashCommandBuilder()
-    .setOptions([string('blep').setRequired(true)])
-    .onInteraction((options, interaction) => {});
