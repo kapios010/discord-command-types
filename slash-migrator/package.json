@@ -4,5 +4,8 @@
     "author": {
         "name": "kapios010",
         "url": "https://kapios.dev"
+    },
+    "dependencies": {
+        "@dsc-slash/builder": "workspace:*"
     }
 }

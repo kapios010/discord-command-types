@@ -5,9 +5,17 @@
         "name": "kapios010",
         "url": "https://kapios010"
     },
+    "scripts": {
+        "build": "echo undefined",
+        "test": "vitest --run",
+        "test:watch": "vitest"
+    },
     "dependencies": {
         "@sapphire/shapeshift": "^4.0.0",
         "discord.js": "^14.21.0",
         "lilconfig": "^3.1.3"
+    },
+    "devDependencies": {
+        "vitest": "^3.2.4"
     }
 }
