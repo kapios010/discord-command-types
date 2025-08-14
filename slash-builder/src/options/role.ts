@@ -16,6 +16,6 @@ export class RoleOptionBuilder<
     }
 }
 
-export function role<T extends string>(name: T) {
-    return new RoleOptionBuilder(name)
+export function role<T extends string>(name: T, description: string) {
+    return new RoleOptionBuilder(name, description)
 }

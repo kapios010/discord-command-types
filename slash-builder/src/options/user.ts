@@ -16,6 +16,6 @@ export class UserOptionBuilder<
     }
 }
 
-export function user<T extends string>(name: T) {
-    return new UserOptionBuilder(name)
+export function user<T extends string>(name: T, description: string) {
+    return new UserOptionBuilder(name, description)
 }

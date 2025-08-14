@@ -41,9 +41,10 @@ export class NumericOptionBuilder<
 
     constructor(
         name: TName,
+        description: string,
         type: DiscordOptionTypes.INTEGER | DiscordOptionTypes.NUMBER
     ) {
-        super(name);
+        super(name, description);
         this.type = type;
     }
 
@@ -53,22 +54,14 @@ export class NumericOptionBuilder<
     }
 
     public setChoices<TKeys extends number>(
-        callbackfn: (
-            choice: ChoiceBuilder<
-                DiscordOptionTypes.INTEGER | DiscordOptionTypes.NUMBER,
-                number
-            >
-        ) => ChoiceBuilder<
-            DiscordOptionTypes.INTEGER | DiscordOptionTypes.NUMBER,
-            TKeys
-        >[]
+        callbackfn: () => ChoiceBuilder<typeof this.type, TKeys>[]
     ) {
         let derived = this as unknown as NumericOptionBuilder<
             TName,
             TRequired,
             TKeys
         >;
-        derived._setChoices(callbackfn);
+        derived._setChoices(callbackfn());
         return derived;
     }
 
@@ -89,10 +82,10 @@ export class NumericOptionBuilder<
     }
 }
 
-export function integer<T extends string>(name: T) {
-    return new NumericOptionBuilder(name, DiscordOptionTypes.INTEGER);
+export function integer<T extends string>(name: T, description: string) {
+    return new NumericOptionBuilder(name, description, DiscordOptionTypes.INTEGER);
 }
 
-export function number<T extends string>(name: T) {
-    return new NumericOptionBuilder(name, DiscordOptionTypes.NUMBER);
+export function number<T extends string>(name: T, description: string) {
+    return new NumericOptionBuilder(name, description, DiscordOptionTypes.NUMBER);
 }

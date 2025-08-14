@@ -62,22 +62,24 @@ export abstract class BaseOptionBuilder<
 > implements BaseOption<TName, TType, TRequired>
 {
     public abstract readonly type: TType;
-    declare public readonly name: TName;
-    declare public readonly name_localizations?: Partial<
+    public readonly name: TName;
+    public readonly name_localizations?: Partial<
         Readonly<Record<Locale, string>>
     >;
-    declare public readonly description: string;
-    declare public readonly description_localizations?: Partial<
+    public readonly description: string;
+    public readonly description_localizations?: Partial<
         Readonly<Record<Locale, string>>
     >;
-    declare public readonly required: TRequired;
+    public readonly required?: TRequired;
 
     /**
      * @param name - The option name adhering to {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-naming | Discord's naming scheme}
      */
-    constructor(name: TName) {
+    constructor(name: TName, description: string) {
         validateName(name);
-        Reflect.set(this, 'name', name);
+        validateDescription(description);
+        this.name = name
+        this.description = description
     }
 
     /**
@@ -95,16 +97,6 @@ export abstract class BaseOptionBuilder<
         if (typeof this.name_localizations === 'undefined')
             Reflect.set(this, 'name_localizations', {});
         Reflect.set(this.name_localizations!, locale, name);
-        return this;
-    }
-
-    /**
-     * Sets the description of the option
-     * @param description - The content of the description (1-100 characters)
-     */
-    public setDescription(description: string) {
-        validateDescription(description);
-        Reflect.set(this, 'description', description);
         return this;
     }
 
@@ -134,8 +126,6 @@ export abstract class BaseOptionBuilder<
         required: T
     ): BaseOptionBuilder<TName, TType, T>;
 
-    /**
-     * @internal
-     */
+    /* @internal */
     public abstract build(): BaseOption<TName, TType, TRequired>;
 }

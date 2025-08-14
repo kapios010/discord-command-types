@@ -16,6 +16,6 @@ export class BooleanOptionBuilder<
     }
 }
 
-export function boolean<T extends string>(name: T) {
-    return new BooleanOptionBuilder(name)
+export function boolean<T extends string>(name: T, description: string) {
+    return new BooleanOptionBuilder(name, description)
 }

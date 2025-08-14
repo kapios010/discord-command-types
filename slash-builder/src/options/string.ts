@@ -46,16 +46,14 @@ export class StringOptionBuilder<
     }
 
     public setChoices<TKeys extends string>(
-        callbackfn: (
-            choice: ChoiceBuilder<DiscordOptionTypes.STRING, string>
-        ) => ChoiceBuilder<DiscordOptionTypes.STRING, TKeys>[]
+        callbackfn: () => ChoiceBuilder<DiscordOptionTypes.STRING, TKeys>[]
     ) {
         let derived = this as unknown as StringOptionBuilder<
             TName,
             TRequired,
             TKeys
         >;
-        derived._setChoices(callbackfn);
+        derived._setChoices(callbackfn());
         return derived;
     }
 
@@ -76,6 +74,6 @@ export class StringOptionBuilder<
     }
 }
 
-export function string<T extends string>(name: T) {
-    return new StringOptionBuilder(name);
+export function string<T extends string>(name: T, description: string) {
+    return new StringOptionBuilder(name, description);
 }

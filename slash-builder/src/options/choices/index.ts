@@ -1,7 +1,7 @@
 import { Locale } from 'discord.js';
 import { DiscordOptionTypes } from '../common';
 import { validateChoiceName, validateName } from '../../utils/Validations';
-import { TypeFromDiscordOptionType } from '../../parse_options';
+import { TypeFromDiscordOptionType } from '../../command/parse_options';
 
 export type ChoosableTypes =
     | DiscordOptionTypes.STRING
@@ -9,9 +9,8 @@ export type ChoosableTypes =
     | DiscordOptionTypes.INTEGER;
 
 export interface Choice<
-    TType extends ChoosableTypes = ChoosableTypes,
     TValue extends
-        TypeFromDiscordOptionType<TType> = TypeFromDiscordOptionType<TType>,
+        TypeFromDiscordOptionType<DiscordOptionTypes> = TypeFromDiscordOptionType<DiscordOptionTypes>,
 > {
     name: string;
     name_localizations?: Partial<Record<Locale, string>>;
@@ -22,7 +21,7 @@ export class ChoiceBuilder<
     TType extends ChoosableTypes,
     TValue extends
         TypeFromDiscordOptionType<TType> = TypeFromDiscordOptionType<TType>,
-> implements Choice<TType, TValue>
+> implements Choice<TValue>
 {
     declare public readonly name: string;
     declare public readonly value: TValue;
@@ -30,24 +29,9 @@ export class ChoiceBuilder<
         Readonly<Record<Locale, string>>
     >;
 
-    constructor(type: TType) {}
-
-    public setValue<TLValue extends TypeFromDiscordOptionType<TType>>(
-        value: TLValue
-    ) {
-        // You know I thought using 'as unknown as X' was bad but then I saw that discord.js did something for options
-        // It's probably still bad
-        let changed = this as unknown as ChoiceBuilder<TType, TLValue>;
-        Reflect.set(changed, 'name', this.name);
-        Reflect.set(changed, 'name_localizations', this.name_localizations);
-        Reflect.set(changed, 'value', value);
-        return changed;
-    }
-
-    public setName(name: string) {
-        validateChoiceName(name);
-        Reflect.set(this, 'name', name);
-        return this;
+    constructor(name: string, value: TValue) {
+        this.name = name;
+        this.value = value;
     }
 
     public addNameLocalization<TLocale extends Locale>(
@@ -67,8 +51,13 @@ export class ChoiceBuilder<
      * @internal
      */
     public build() {
-        return this as Choice<TType, TValue>;
+        return this as Choice<TValue>;
     }
 }
 
-export type ChoiceKeys<T extends readonly Choice[]> = T[number]['value'];
+export function choice<
+    TType extends ChoosableTypes,
+    TValue extends TypeFromDiscordOptionType<TType>,
+>(name: string, value: TValue): ChoiceBuilder<TType, TValue> {
+    return new ChoiceBuilder(name, value);
+}

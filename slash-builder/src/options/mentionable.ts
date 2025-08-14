@@ -16,6 +16,6 @@ export class MentionableOptionBuilder<
     }
 }
 
-export function mentionable<T extends string>(name:T) {
-    return new MentionableOptionBuilder(name)
+export function mentionable<T extends string>(name:T, description: string) {
+    return new MentionableOptionBuilder(name, description)
 }

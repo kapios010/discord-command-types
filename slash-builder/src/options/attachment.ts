@@ -16,6 +16,6 @@ export class AttachmentOptionBuilder<
     }
 }
 
-export function attachment<T extends string>(name: T) {
-    return new AttachmentOptionBuilder(name)
+export function attachment<T extends string>(name: T, description: string) {
+    return new AttachmentOptionBuilder(name, description)
 }

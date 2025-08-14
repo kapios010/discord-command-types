@@ -31,6 +31,6 @@ implements ChannelOption<TName, TRequired> {
     }
 }
 
-export function channel<T extends string>(name: T) {
-    return new ChannelOptionBuilder(name)
+export function channel<T extends string>(name: T, description: string) {
+    return new ChannelOptionBuilder(name, description)
 }
