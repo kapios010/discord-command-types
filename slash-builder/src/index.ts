@@ -5,7 +5,6 @@ import * as path from 'path'
 import * as fs from 'fs'
 import parentModule from 'parent-module'
 import { TypeFromDiscordOptionType } from './command/parse_options'
-import { DefaultBool, NOT, Nullable } from './utils'
 
 export class SlashCommandHandler {
     public readonly applicationId: string
@@ -60,6 +59,7 @@ export class SlashCommandHandler {
         if (command!.data.options) {
             for (const option of command!.data.options) {
                 let value: TypeFromDiscordOptionType<typeof option.type> | null
+                // Do you like my teeny tiny switch statement??? Yeah, me neither. (but don't tell it that)
                 switch (option.type) {
                     case DiscordOptionTypes.BOOLEAN:
                         value = interaction.options.getBoolean(option.name, option.required)
