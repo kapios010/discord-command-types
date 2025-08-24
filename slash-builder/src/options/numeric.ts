@@ -8,8 +8,8 @@ import {
 
 export interface NumericOption<
     TName extends string,
-    TRequired extends boolean,
-    TInputs extends number,
+    TRequired extends boolean = false,
+    TInputs extends number = never,
 > extends BaseChoosableOption<
         TName,
         DiscordOptionTypes.NUMBER | DiscordOptionTypes.INTEGER,
@@ -22,7 +22,7 @@ export interface NumericOption<
 
 export class NumericOptionBuilder<
         TName extends string,
-        TRequired extends boolean,
+        TRequired extends boolean = false,
         TInputs extends number = never,
     >
     extends BaseChoosableOptionBuilder<

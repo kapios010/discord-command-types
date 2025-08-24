@@ -2,7 +2,7 @@ import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from "./common";
 
 export class MentionableOptionBuilder<
     TName extends string,
-    TRequired extends boolean
+    TRequired extends boolean = false
 > extends BaseOptionBuilder<TName, DiscordOptionTypes.MENTIONABLE, TRequired> {
     public type = DiscordOptionTypes.MENTIONABLE as const;
 

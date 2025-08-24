@@ -24,7 +24,7 @@ export enum DiscordOptionTypes {
 export interface BaseOption<
     TName extends string,
     TType extends DiscordOptionTypes,
-    TRequired extends boolean,
+    TRequired extends boolean = false,
 > {
     /**
      * Type of the option
@@ -58,7 +58,7 @@ export interface BaseOption<
 export abstract class BaseOptionBuilder<
     TName extends string,
     TType extends DiscordOptionTypes,
-    TRequired extends boolean,
+    TRequired extends boolean = false,
 > implements BaseOption<TName, TType, TRequired>
 {
     public abstract readonly type: TType;

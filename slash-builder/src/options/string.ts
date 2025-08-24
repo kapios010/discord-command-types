@@ -11,7 +11,7 @@ import {
 
 export interface StringOption<
     TName extends string,
-    TRequired extends boolean,
+    TRequired extends boolean = false,
     TInputs extends string = never,
 > extends BaseChoosableOption<
         TName,
@@ -25,7 +25,7 @@ export interface StringOption<
 
 export class StringOptionBuilder<
         TName extends string,
-        TRequired extends boolean,
+        TRequired extends boolean = false,
         TInputs extends string = never,
     >
     extends BaseChoosableOptionBuilder<

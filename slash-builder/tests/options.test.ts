@@ -2,6 +2,7 @@ import { describe, expect, expectTypeOf, it, test } from 'vitest'
 import { BooleanOptionBuilder, boolean } from '../src/options/boolean'
 import { DiscordOptionTypes } from '../src/options/common'
 import { SlashCommandBuilder } from '../src/command/command'
+import { channel } from '../src/options/channel'
 
 
 // I'LL DO TESTS LATER RAHHHHHHH
@@ -20,9 +21,11 @@ describe('Testing common (not choosable) options', () => {
         let a = new SlashCommandBuilder('blapo')
         .setDescription('bleep')
         .setOptions(() => [
-            boolean('bleere', 'should there be a bird?')
+            boolean('bleere', 'should there be a bird?').setRequired(false),
+            channel('blep', 'blaro').setRequired(true),
         ])
-        .onInteraction((options, interaction) => {})
+        .onInteraction(async (options, interaction) => {
+        })
 
         console.dir(a.data, {depth: null})
     })

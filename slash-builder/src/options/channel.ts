@@ -3,14 +3,14 @@ import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from './common';
 
 export interface ChannelOption<
     TName extends string,
-    TRequired extends boolean
+    TRequired extends boolean = false
 > extends BaseOption<TName, DiscordOptionTypes.CHANNEL, TRequired> {
     readonly channel_types?: ReadonlyArray<ChannelType>
 }
 
 export class ChannelOptionBuilder<
     TName extends string,
-    TRequired extends boolean
+    TRequired extends boolean = false
 > extends BaseOptionBuilder<TName, DiscordOptionTypes.CHANNEL,TRequired>
 implements ChannelOption<TName, TRequired> {
     public readonly channel_types?: ReadonlyArray<ChannelType>;

@@ -2,6 +2,7 @@ import { Base, ChatInputCommandInteraction, Locale, SlashCommandBuilder } from '
 import { BaseOption, DiscordOptionTypes } from '../options/common';
 import { NumericOption, integer } from '../options/numeric';
 import { ParsedOptions } from './parse_options';
+import { SCOPE_GLOBAL } from './command';
 
 export enum IntegrationTypes {
     GUILD_INSTALL,
@@ -19,10 +20,10 @@ export interface SlashCommandMigratorData<
 > {
     name: string;
     name_localizations?: Partial<Record<Locale, string>>;
-    description: string;
+    description?: string;
     description_localizations?: Partial<Record<Locale, string>>;
-    scope: string[] | 'GLOBAL';
-    options: TOptions extends never[] ? undefined : TOptions;
+    scope: string | typeof SCOPE_GLOBAL;
+    options?: TOptions;
     // default_member_permissions - I don't understand this so it goes unimplemented for now
     nsfw?: boolean;
     // integration_types - Uninplemented for now
@@ -36,5 +37,15 @@ export interface SlashCommandExecutor<
     execute: (
         options: ParsedOptions<TOptions>,
         interaction: ChatInputCommandInteraction
-    ) => void;
+    ) => Promise<void>;
+}
+
+export class SlashCommandExecutor <
+    TOptions extends BaseOption<string, DiscordOptionTypes, boolean>[],
+> implements SlashCommandExecutor<TOptions>
+{
+    constructor(executor: SlashCommandExecutor<TOptions>) {
+        this.data = executor.data
+        this.execute = executor.execute
+    }
 }

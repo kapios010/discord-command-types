@@ -7,25 +7,20 @@ import { string } from '../options/string';
 
 export const SCOPE_GLOBAL: unique symbol = Symbol('Global');
 
-export class SlashCommandBuilder<
-    TOptions extends BaseOption<
-        string,
-        DiscordOptionTypes,
-        boolean
-    >[] = never[],
-> implements SlashCommandMigratorData<TOptions>
+export class SlashCommandBuilder<TOptions extends BaseOption<string, DiscordOptionTypes, boolean>[] = never[]>
+    implements SlashCommandMigratorData<TOptions>
 {
     public readonly name: string;
-    public readonly description: string;
+    public readonly description?: string;
     public readonly description_localizations?: Partial<Record<Locale, string>>;
     public readonly name_localizations?: Partial<Record<Locale, string>>;
-    public readonly scope: string[] | 'GLOBAL';
+    public readonly scope: string | typeof SCOPE_GLOBAL = SCOPE_GLOBAL;
     public readonly nsfw?: boolean;
-    public readonly options: TOptions extends never[] ? undefined : TOptions;
+    public readonly options?: TOptions;
 
     constructor(name: string) {
         validateName(name);
-        this.name = name
+        this.name = name;
     }
 
     /**
@@ -34,14 +29,11 @@ export class SlashCommandBuilder<
      * @param name - The localized name, adhering to {@link https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-naming | Discord's naming scheme}
      */
     public addNameLocalization<TLocale extends Locale>(
-        locale: TLocale extends keyof this['name_localizations']
-            ? never
-            : TLocale,
+        locale: TLocale extends keyof this['name_localizations'] ? never : TLocale,
         name: string
     ) {
         validateName(name);
-        if (typeof this.name_localizations === 'undefined')
-            Reflect.set(this, 'name_localizations', {});
+        if (typeof this.name_localizations === 'undefined') Reflect.set(this, 'name_localizations', {});
         Reflect.set(this.name_localizations!, locale, name);
         return this;
     }
@@ -58,14 +50,11 @@ export class SlashCommandBuilder<
      * @param description - The content of the translation
      */
     public addDescriptionLocalization<TLocale extends Locale>(
-        locale: TLocale extends keyof this['description_localizations']
-            ? never
-            : TLocale,
+        locale: TLocale extends keyof this['description_localizations'] ? never : TLocale,
         description: string
     ) {
         validateDescription(description);
-        if (typeof this.description_localizations === 'undefined')
-            Reflect.set(this, 'description_localizations', {});
+        if (typeof this.description_localizations === 'undefined') Reflect.set(this, 'description_localizations', {});
         Reflect.set(this.description_localizations!, locale, description);
         return this;
     }
@@ -80,21 +69,23 @@ export class SlashCommandBuilder<
 
     public setNSFW(nsfw: boolean) {
         Reflect.set(this, 'nsfw', nsfw);
+        return this;
     }
 
-    public setOptions<
-        TLOptions extends BaseOptionBuilder<string, DiscordOptionTypes, boolean>[],
-    >(callbackfn: () => TLOptions) {
+    public setOptions<TLOptions extends BaseOptionBuilder<string, DiscordOptionTypes, boolean>[]>(
+        callbackfn: () => TLOptions
+    ) {
         const derived = this as unknown as SlashCommandBuilder<TLOptions>;
-        Reflect.set(derived, 'options', callbackfn().map((value) => value.build()));
+        Reflect.set(
+            derived,
+            'options',
+            callbackfn().map((value) => value.build())
+        );
         return derived;
     }
 
     public onInteraction(
-        callback: (
-            options: ParsedOptions<TOptions>,
-            interaction: ChatInputCommandInteraction
-        ) => void
+        callback: (options: ParsedOptions<TOptions>, interaction: ChatInputCommandInteraction) => Promise<void>
     ): SlashCommandExecutor<TOptions> {
         return {
             data: this as SlashCommandMigratorData<TOptions>,

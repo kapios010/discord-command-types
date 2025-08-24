@@ -2,7 +2,7 @@ import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from "./common";
 
 export class AttachmentOptionBuilder<
     TName extends string,
-    TRequired extends boolean
+    TRequired extends boolean = false
 > extends BaseOptionBuilder<TName, DiscordOptionTypes.ATTACHMENT, TRequired> {
     public type = DiscordOptionTypes.ATTACHMENT as const;
 

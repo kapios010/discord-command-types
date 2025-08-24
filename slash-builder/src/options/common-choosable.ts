@@ -8,8 +8,8 @@ import { TypeFromDiscordOptionType } from '../command/parse_options';
 export interface BaseChoosableOption<
     TName extends string,
     TType extends ChoosableTypes,
-    TRequired extends boolean,
-    TInputs extends TypeFromDiscordOptionType<TType>,
+    TRequired extends boolean = false,
+    TInputs extends TypeFromDiscordOptionType<TType> = never,
 > extends BaseOption<TName, TType, TRequired> {
     readonly choices: TInputs extends never
         ? undefined
@@ -19,7 +19,7 @@ export interface BaseChoosableOption<
 export abstract class BaseChoosableOptionBuilder<
         TName extends string,
         TType extends ChoosableTypes,
-        TRequired extends boolean,
+        TRequired extends boolean = false,
         TInputs extends TypeFromDiscordOptionType<TType> = never,
     >
     extends BaseOptionBuilder<TName, TType, TRequired>
