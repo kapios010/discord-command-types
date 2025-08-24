@@ -1,26 +1,26 @@
-import { ChatInputCommandInteraction, Locale, TextBasedChannel } from 'discord.js';
-import { SlashCommandExecutor, SlashCommandMigratorData } from './command_data';
-import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from '../options/common';
-import { validateDescription, validateName } from '../utils/Validations';
-import { ParsedOptions } from './parse_options';
-import { string } from '../options/string';
+import { ChatInputCommandInteraction, Locale, TextBasedChannel } from 'discord.js'
+import { SlashCommandExecutor, SlashCommandMigratorData } from './data.mjs'
+import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from '../options/common.mjs'
+import { validateDescription, validateName } from '../utils/validations.mjs'
+import { ParsedOptions } from './options_parser.mjs'
+import { string } from '../options/string.mjs'
 
-export const SCOPE_GLOBAL: unique symbol = Symbol('Global');
+export const SCOPE_GLOBAL: unique symbol = Symbol('Global')
 
 export class SlashCommandBuilder<TOptions extends BaseOption<string, DiscordOptionTypes, boolean>[] = never[]>
     implements SlashCommandMigratorData<TOptions>
 {
-    public readonly name: string;
-    public readonly description?: string;
-    public readonly description_localizations?: Partial<Record<Locale, string>>;
-    public readonly name_localizations?: Partial<Record<Locale, string>>;
-    public readonly scope: string | typeof SCOPE_GLOBAL = SCOPE_GLOBAL;
-    public readonly nsfw?: boolean;
-    public readonly options?: TOptions;
+    public readonly name: string
+    public readonly description?: string
+    public readonly description_localizations?: Partial<Record<Locale, string>>
+    public readonly name_localizations?: Partial<Record<Locale, string>>
+    public readonly scope: string | typeof SCOPE_GLOBAL = SCOPE_GLOBAL
+    public readonly nsfw?: boolean
+    public readonly options?: TOptions
 
     constructor(name: string) {
-        validateName(name);
-        this.name = name;
+        validateName(name)
+        this.name = name
     }
 
     /**
@@ -32,16 +32,16 @@ export class SlashCommandBuilder<TOptions extends BaseOption<string, DiscordOpti
         locale: TLocale extends keyof this['name_localizations'] ? never : TLocale,
         name: string
     ) {
-        validateName(name);
-        if (typeof this.name_localizations === 'undefined') Reflect.set(this, 'name_localizations', {});
-        Reflect.set(this.name_localizations!, locale, name);
-        return this;
+        validateName(name)
+        if (typeof this.name_localizations === 'undefined') Reflect.set(this, 'name_localizations', {})
+        Reflect.set(this.name_localizations!, locale, name)
+        return this
     }
 
     public setDescription(description: string) {
-        validateDescription(description);
-        Reflect.set(this, 'description', description);
-        return this;
+        validateDescription(description)
+        Reflect.set(this, 'description', description)
+        return this
     }
 
     /**
@@ -53,35 +53,35 @@ export class SlashCommandBuilder<TOptions extends BaseOption<string, DiscordOpti
         locale: TLocale extends keyof this['description_localizations'] ? never : TLocale,
         description: string
     ) {
-        validateDescription(description);
-        if (typeof this.description_localizations === 'undefined') Reflect.set(this, 'description_localizations', {});
-        Reflect.set(this.description_localizations!, locale, description);
-        return this;
+        validateDescription(description)
+        if (typeof this.description_localizations === 'undefined') Reflect.set(this, 'description_localizations', {})
+        Reflect.set(this.description_localizations!, locale, description)
+        return this
     }
 
     /**
      * @param scope - `GLOBAL` (symbol) if it's a global command, otherwise array of guild IDs
      */
     public setScope(scope: string | typeof SCOPE_GLOBAL) {
-        Reflect.set(this, 'scope', scope);
-        return this;
+        Reflect.set(this, 'scope', scope)
+        return this
     }
 
     public setNSFW(nsfw: boolean) {
-        Reflect.set(this, 'nsfw', nsfw);
-        return this;
+        Reflect.set(this, 'nsfw', nsfw)
+        return this
     }
 
     public setOptions<TLOptions extends BaseOptionBuilder<string, DiscordOptionTypes, boolean>[]>(
         callbackfn: () => TLOptions
     ) {
-        const derived = this as unknown as SlashCommandBuilder<TLOptions>;
+        const derived = this as unknown as SlashCommandBuilder<TLOptions>
         Reflect.set(
             derived,
             'options',
             callbackfn().map((value) => value.build())
-        );
-        return derived;
+        )
+        return derived
     }
 
     public onInteraction(
@@ -90,6 +90,6 @@ export class SlashCommandBuilder<TOptions extends BaseOption<string, DiscordOpti
         return {
             data: this as SlashCommandMigratorData<TOptions>,
             execute: callback,
-        };
+        }
     }
 }

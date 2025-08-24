@@ -1,10 +1,11 @@
-import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from "./common";
+import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from './common.mjs'
 
-export class BooleanOptionBuilder<
-    TName extends string,
-    TRequired extends boolean = false
-> extends BaseOptionBuilder<TName, DiscordOptionTypes.BOOLEAN, TRequired> {
-    public type = DiscordOptionTypes.BOOLEAN as const;
+export class BooleanOptionBuilder<TName extends string, TRequired extends boolean = false> extends BaseOptionBuilder<
+    TName,
+    DiscordOptionTypes.BOOLEAN,
+    TRequired
+> {
+    public type = DiscordOptionTypes.BOOLEAN as const
 
     public setRequired<T extends boolean>(required: T) {
         Reflect.set(this, 'required', required)

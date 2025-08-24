@@ -1,10 +1,10 @@
-import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from "./common";
+import { BaseOption, BaseOptionBuilder, DiscordOptionTypes } from './common.mjs'
 
 export class MentionableOptionBuilder<
     TName extends string,
-    TRequired extends boolean = false
+    TRequired extends boolean = false,
 > extends BaseOptionBuilder<TName, DiscordOptionTypes.MENTIONABLE, TRequired> {
-    public type = DiscordOptionTypes.MENTIONABLE as const;
+    public type = DiscordOptionTypes.MENTIONABLE as const
 
     public setRequired<T extends boolean>(required: T) {
         Reflect.set(this, 'required', required)
@@ -16,6 +16,6 @@ export class MentionableOptionBuilder<
     }
 }
 
-export function mentionable<T extends string>(name:T, description: string) {
+export function mentionable<T extends string>(name: T, description: string) {
     return new MentionableOptionBuilder(name, description)
 }

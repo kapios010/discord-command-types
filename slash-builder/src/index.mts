@@ -1,10 +1,10 @@
 import { Client, Collection, Interaction } from 'discord.js'
-import { SlashCommandExecutor, SlashCommandMigratorData } from './command/command_data'
-import { BaseOption, DiscordOptionTypes } from './options/common'
+import { SlashCommandExecutor, SlashCommandMigratorData } from './command/data.mjs'
+import { BaseOption, DiscordOptionTypes } from './options/common.mjs'
 import * as path from 'path'
 import * as fs from 'fs'
 import parentModule from 'parent-module'
-import { TypeFromDiscordOptionType } from './command/parse_options'
+import { TypeFromDiscordOptionType } from './command/options_parser.mjs'
 
 export class SlashCommandHandler {
     public readonly applicationId: string

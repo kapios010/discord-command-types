@@ -1,5 +1,5 @@
-import { BaseOption, DiscordOptionTypes } from '../options/common'
-import {
+import { BaseOption, DiscordOptionTypes } from '../options/common.mjs'
+import type {
     APIInteractionDataResolvedChannel,
     APIInteractionDataResolvedGuildMember,
     APIRole,
@@ -9,7 +9,7 @@ import {
     Role,
     User,
 } from 'discord.js'
-import { BaseChoosableOption } from '../options/common-choosable'
+import { BaseChoosableOption } from '../options/common-choosable.mjs'
 
 // Is there a better way to do this?
 export type TypeFromDiscordOptionType<T extends DiscordOptionTypes> = T extends DiscordOptionTypes.STRING
