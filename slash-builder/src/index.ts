@@ -7,7 +7,7 @@ import parentModule from 'parent-module'
 import { TypeFromDiscordOptionType } from './command/parse_options'
 import { DefaultBool, NOT, Nullable } from './utils'
 
-class DiscordSlashHandler {
+export class SlashCommandHandler {
     public readonly applicationId: string
     public readonly botToken: string
     public readonly loadedCommands: Collection<
