@@ -26,6 +26,7 @@
       "persistent": true
     },
     "@dsc-slash/migrator#dev": {
+      "cache": false,
       "persistent": true,
       "dependsOn": ["@dsc-slash/builder#build"]
     }
