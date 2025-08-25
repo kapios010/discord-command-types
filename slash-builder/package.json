@@ -1,5 +1,6 @@
 {
     "name": "@dsc-slash/builder",
+    "private": false,
     "version": "0.1.0",
     "author": {
         "name": "kapios010",

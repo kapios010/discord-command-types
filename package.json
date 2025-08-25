@@ -1,6 +1,6 @@
 {
   "name": "discord-slash-creator",
-  "private": true,
+  "private": false,
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",

@@ -1,6 +1,7 @@
 {
     "name": "@dsc-slash/migrator",
     "version": "0.1.0",
+    "private": false,
     "author": {
         "name": "kapios010",
         "url": "https://kapios.dev"
