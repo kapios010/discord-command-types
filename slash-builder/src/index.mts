@@ -1,4 +1,4 @@
-import { Client, Collection, Interaction } from 'discord.js'
+import { Base, Client, Collection, Interaction } from 'discord.js'
 import { SlashCommandExecutor, SlashCommandMigratorData } from './command/data.mjs'
 import { BaseOption, DiscordOptionTypes } from './options/common.mjs'
 import * as path from 'path'
@@ -7,47 +7,50 @@ import parentModule from 'parent-module'
 import { TypeFromDiscordOptionType } from './command/options_parser.mjs'
 
 export class SlashCommandHandler {
-    public readonly applicationId: string
-    public readonly botToken: string
     public readonly loadedCommands: Collection<
         string,
         SlashCommandExecutor<BaseOption<string, DiscordOptionTypes, boolean>[]>
-    > = new Collection()
-
-    constructor(applicationId: string, botToken: string) {
-        this.applicationId = applicationId
-        this.botToken = botToken
-    }
+    > = new Collection<
+    string,
+    SlashCommandExecutor<BaseOption<string, DiscordOptionTypes, boolean>[]>
+    >()
 
     private isValidExecutor(
         executor: unknown
     ): executor is SlashCommandExecutor<BaseOption<string, DiscordOptionTypes, boolean>[]> {
-        return executor instanceof SlashCommandExecutor
+        return ("data" in (executor as any) && "execute" in (executor as any))
     }
 
-    public async loadCommands(commandsDir: string = './commands/'): Promise<void> {
-        const caller = parentModule()
-        if (!caller) throw 'Could not find parent module when loading commands. This is likely not user error.'
-        const resolvedCommandsDir = path.join(caller, commandsDir)
+    public loadCommands(commandsDir: string = './commands/', relative: boolean = true): void {
+        let resolvedCommandsDir: string
+        if(relative) {
+            const caller = parentModule()
+            if (!caller) throw 'Could not find parent module when loading commands. This is likely not user error.'
+            resolvedCommandsDir = path.join(caller, commandsDir)
+        } else {
+            resolvedCommandsDir = commandsDir
+        }
+
         const commandFiles = fs
             .readdirSync(resolvedCommandsDir, { withFileTypes: true, recursive: true })
             // Check whether file is JS or TS
             .filter((file) => file.isFile() && /^.+\.(js|mjs|ts)$/g.test(file.name))
             // Turn the file object into a path the file
-            .map((file) => path.join(resolvedCommandsDir, file.parentPath, file.name))
+            .map((file) => path.join(file.parentPath, file.name))
         for (const cmdFile of commandFiles) {
-            const command = await import(cmdFile)
-            if (!this.isValidExecutor(command)) {
+            const command = require(cmdFile)
+            if (!this.isValidExecutor(command.default)) {
                 console.warn(
                     `[WARN] File ${cmdFile} doesn't contain a valid SlashCommandExecutor export. The code exported from there (if any) will not be ran.`
                 )
                 continue
             }
-            if (this.loadedCommands.has(command.data.name)) {
-                throw `[ERR] Two commands with name ${command.data.name} found. Aborting...`
+            const commandDefault: SlashCommandExecutor<BaseOption<string, DiscordOptionTypes, boolean>[]> = command.default
+            if (this.loadedCommands.has(commandDefault.data.name)) {
+                throw `[ERR] Two commands with name ${commandDefault.data.name} found. Aborting...`
             }
-            this.loadedCommands.set(command.data.name, command)
-            console.log(`[INFO] Loaded command ${command.data.name}.`)
+            this.loadedCommands.set(commandDefault.data.name, commandDefault)
+            console.log(`[INFO] Loaded command ${commandDefault.data.name}.`)
         }
     }
 

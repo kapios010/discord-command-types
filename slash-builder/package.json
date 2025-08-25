@@ -13,34 +13,34 @@
     },
     "exports": {
         "./options/choices": {
-            "default": "./dist/options/choices/index.js",
-            "types": "./dist/options/choices/index.d.ts",
-            "module": "./dist/options/choices/index.mjs"
+            "types": "./src/options/choices/index.d.ts",
+            "module": "./dist/options/choices/index.mjs",
+            "default": "./dist/options/choices/index.js"
         },
         "./options/*": {
-            "default": "./dist/options/*.js",
-            "types": "./dist/options/*.d.ts",
-            "module": "./dist/options/*.mjs"
+            "types": "./src/options/*.d.ts",
+            "module": "./dist/options/*.mjs",
+            "default": "./dist/options/*.js"
         },
         "./command/data": {
-            "default": "./dist/command/data.js",
-            "types": "./dist/command/data.d.ts",
-            "module": "./dist/command/data.mjs"
+            "types": "./src/command/data.d.ts",
+            "module": "./dist/command/data.mjs",
+            "default": "./dist/command/data.js"
         },
         "./command/options_parser": {
-            "default": "./dist/command/options_parser.js",
-            "types": "./dist/command/options_parser.d.ts",
-            "module": "./dist/command/options_parser.mjs"
+            "types": "./src/command/options_parser.d.ts",
+            "module": "./dist/command/options_parser.mjs",
+            "default": "./dist/command/options_parser.js"
         },
         "./command": {
-            "default": "./dist/command/index.js",
-            "types": "./dist/command/index.d.ts",
-            "module": "./dist/command/index.mjs"
+            "types": "./src/command/index.d.ts",
+            "module": "./dist/command/index.mjs",
+            "default": "./dist/command/index.js"
         },
         ".": {
-            "default": "./dist/index.js",
-            "types": "./dist/index.d.ts",
-            "module": "./dist/**/*.mjs"
+            "types": "./src/index.ts",
+            "module": "./dist/index.mjs",
+            "default": "./dist/index.js"
         }
     },
     "dependencies": {
