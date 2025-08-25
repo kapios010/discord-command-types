@@ -7,17 +7,20 @@
     },
     "scripts": {
         "build": "tsup src/bin.ts",
-        "migrator-run": "tsx ./src/bin.ts"
+        "dev": "tsx ./src/bin.ts"
     },
     "dependencies": {
         "@dsc-slash/builder": "workspace:*",
+        "axios": "^1.11.0",
         "chalk": "^5.6.0",
+        "discord.js": "^14.21.0",
         "readline-sync": "^1.4.10",
         "yargs": "^18.0.0"
     },
     "bin": "./dist/bin.js",
     "devDependencies": {
         "@types/node": "^24.3.0",
+        "@types/readline-sync": "^1.4.8",
         "@types/yargs": "^17.0.33",
         "tsup": "^8.5.0",
         "tsx": "^4.20.5"

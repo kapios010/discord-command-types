@@ -3,7 +3,7 @@
   "ui": "tui",
   "tasks": {
     "migrator-run": {
-      "persistent": false
+      "persistent": true
     },
     "build": {
       "dependsOn": ["^build"],
@@ -24,6 +24,10 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "@dsc-slash/migrator#dev": {
+      "persistent": true,
+      "dependsOn": ["@dsc-slash/builder#build"]
     }
   }
 }

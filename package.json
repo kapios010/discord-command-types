@@ -9,7 +9,7 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "migrator-run": "turbo run migrator-run",
+    "migrator-run": "turbo run @dsc-slash/migrator#dev",
     "publish-packages": "turbo run build lint test && changeset version && changeset publish"
   },
   "devDependencies": {
