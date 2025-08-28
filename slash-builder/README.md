@@ -26,7 +26,7 @@ import { string } from '@dsc-slash/builder/options/string'
 
 export default new SlashCommandBuilder('some_name')
 .setDescription('This is a test command')
-.setScope('')
+.setScope(SCOPE_GLOBAL)
 .setOptions(() => [
     string('yourStringOption', 'This is an option').setRequired(false)
 ])
