@@ -1,6 +1,3 @@
-> [!IMPORTANT]
-> This package is still in beta and has missing features. And may be broken.
-
 # */slash command* builder
 A plug-in for discord.js that lets you focus on writing code, and not worry about how you're going to register each and every one, as well as handle them!
 
@@ -17,7 +14,7 @@ To write your commands, create the following files:
 import { Client } from "discord.js";
 import { SlashCommandHandler } from "@dsc-slash/builder";
 
-const client = new Client({ intents: [...yourIntents]})
+const client = new Client({ intents: /* Your Bot's Intents */})
 const handler = new SlashCommandHandler()
 handler.loadCommands('./place/with/commands/') // or your own path
 
@@ -25,6 +22,8 @@ client.on('interactionCreate', async (interaction) => {
     if(await handler.handleInteraction(interaction)) return
     else throw 'Failed to handle.'
 })
+
+client.login(/* Your Bot Token */)
 ```
 ```ts
 // ------ ./place/with/commands/something.ts
