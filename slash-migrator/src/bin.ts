@@ -1,5 +1,3 @@
-import yargs from 'yargs'
-import { hideBin } from 'yargs/helpers'
 import chalk from 'chalk'
 import readlineSync from 'readline-sync'
 import { SlashCommandHandler } from '@dsc-slash/builder'
@@ -9,9 +7,6 @@ import { Collection } from 'discord.js'
 import { SCOPE_GLOBAL } from '@dsc-slash/builder/command'
 import axios from 'axios'
 import { AxiosRequestConfig } from 'axios'
-
-//@ts-ignore - @types/node is installed
-const argv = yargs(hideBin(process.argv)).parse()
 
 console.log(
     chalk.bgRed('[IMPORTANT]') +
