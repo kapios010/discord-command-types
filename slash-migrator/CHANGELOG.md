@@ -1,5 +1,12 @@
 # @dsc-slash/migrator
 
+## 0.1.3
+
+### Patch Changes
+
+- Updated dependencies [c201c4f]
+  - @dsc-slash/builder@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes
