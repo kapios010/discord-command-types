@@ -4,6 +4,14 @@
 
 ### Patch Changes
 
+- 5da93c0: Update README, Remove yargs dependency, Update discord.js to be peer dependency
+- Updated dependencies [5da93c0]
+  - @dsc-slash/builder@0.1.2
+
+## 0.1.2
+
+### Patch Changes
+
 - Updated dependencies [622f21e]
   - @dsc-slash/builder@0.1.1
 
