@@ -6,6 +6,25 @@
         "name": "kapios010",
         "url": "https://kapios.dev"
     },
+    "license": "LGPL-3.0-or-later",
+    "repository": {
+      "type": "git",
+      "url": "github:kapios010/discord-command-types"
+    },
+    "contributors": [
+      {
+        "name": "kapios010",
+        "url": "https://kapios.dev"
+      }
+    ],
+    "keywords": [
+        "discord",
+        "bot",
+        "commands",
+        "slash",
+        "slash commands",
+        "interactions"
+    ],
     "scripts": {
         "build": "tsup src/bin.ts",
         "dev": "tsx ./src/bin.ts"

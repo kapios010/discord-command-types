@@ -1,6 +1,6 @@
 {
   "name": "discord-slash-creator",
-  "private": false,
+  "private": true,
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",
@@ -12,6 +12,25 @@
     "migrator-run": "turbo run @dsc-slash/migrator#dev",
     "publish-packages": "turbo run build lint test && changeset version && changeset publish"
   },
+  "license": "LGPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "github:kapios010/discord-command-types"
+  },
+  "contributors": [
+    {
+      "name": "kapios010",
+      "url": "https://kapios.dev"
+    }
+  ],
+  "keywords": [
+    "discord",
+    "bot",
+    "commands",
+    "slash",
+    "slash commands",
+    "interactions"
+  ],
   "devDependencies": {
     "prettier": "^3.6.2",
     "turbo": "^2.5.5",
