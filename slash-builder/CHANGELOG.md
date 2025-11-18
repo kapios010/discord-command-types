@@ -1,5 +1,11 @@
 # @dsc-slash/builder
 
+## 0.1.4
+
+### Patch Changes
+
+- b183957: Added LICENSEs and more information to package.json-s.
+
 ## 0.1.3
 
 ### Patch Changes
